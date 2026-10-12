@@ -2,13 +2,15 @@
 
 Ce fichier prolonge le pipeline du SKILL.md avec les détails techniques, les cas-types et les pièges fréquents de chaque étape.
 
+**Statut** : ce pipeline en 7 étapes est une synthèse originale inspirée des travaux du Good Judgment Project, pas un protocole officiel du GJP. Les seuils chiffrés (tests, cadences, alerte à 20 points) sont des conventions internes de ce skill.
+
 ---
 
 ## Étape 1 — Triage de la question
 
 ### Test de forecastabilité (checklist)
 
-Pour qu'une question soit *forecastable* selon les critères du Good Judgment Project, elle doit cocher les 4 cases suivantes :
+Pour qu'une question soit *prévisible* au sens de ce protocole (critères inspirés de la rédaction des questions de tournoi, qui exige des critères de résolution sans ambiguïté), elle doit cocher les 4 cases suivantes :
 
 | Critère | Test |
 |---------|------|
@@ -34,7 +36,7 @@ Pour les questions continues, **toujours discrétiser** en 3-5 intervalles avant
 
 ### Horizon temporel et dégradation prédictive
 
-Tetlock & Gardner (2015) documentent que la précision des forecasters se dégrade fortement au-delà de 18 mois et devient à peine meilleure que le hasard au-delà de 36-48 mois (selon les domaines).
+La précision décroît avec l'horizon. Dans *Expert Political Judgment* (Tetlock, 2005), la précision des experts se rapproche du hasard pour des prédictions à plusieurs années. Les questions du Good Judgment Project portaient pour l'essentiel sur des horizons de quelques mois à environ un an : on dispose de peu de données sur la précision des superforecasters au-delà. (La version 1.0 de ce fichier attribuait à Tetlock & Gardner des seuils précis — 18 mois, 36-48 mois — qui ne sont pas sourcés.)
 
 **Recommandation** : pour les horizons > 12 mois, **décomposer en sous-questions à horizons plus courts** plutôt que prédire directement à l'horizon long.
 
@@ -74,22 +76,24 @@ Critère validant : *"Un observateur tiers, ignorant tout du contexte, lisant un
 
 #### Décomposition **causale** (chaîne d'événements)
 
-*"P(X est acquise dans 18 mois) = P(X en difficulté) × P(acquéreur émerge | difficulté) × P(deal accepté | acquéreur)"*
+*« P(X acquise dans 18 mois via la voie "difficulté") = P(X en difficulté) × P(acquéreur émerge | difficulté) × P(deal accepté | acquéreur, difficulté) »*
 
-⚠ Si les sous-événements sont **indépendants**, multiplier directement.
-⚠ S'ils sont **corrélés**, ajuster (l'estimation directe peut être supérieure au produit).
+⚠ Le produit est exact **si chaque probabilité est conditionnée à toutes les étapes précédentes**. Multiplier des probabilités non conditionnelles (marginales) n'est valable que si les étapes sont indépendantes ; en cas de corrélation positive, ce produit sous-estime.
+⚠ Le produit ne couvre **qu'une voie**. S'il existe d'autres voies (acquisition sans difficulté financière), il faut les ajouter (décomposition par cas).
 
 #### Décomposition **temporelle** (étapes dans le temps)
 
-*"P(crise dans 24 mois) = P(crise dans premier semestre) + P(crise dans deuxième semestre | pas dans premier) + ..."*
+*« P(crise dans 24 mois) = 1 − Π (1 − hₜ) »*, où hₜ = P(crise au semestre t | pas de crise avant).
+
+Équivalent : P(S1) + P(pas S1) × h₂ + P(pas S1, pas S2) × h₃ + … — chaque risque conditionnel est **pondéré par la probabilité d'arriver jusqu'à cette période**. Additionner directement les hₜ surestime le cumul (et peut dépasser 1). La version 1.0 de ce fichier contenait cette erreur.
 
 #### Décomposition **par cas** (couverture exhaustive)
 
-*"P(événement) = P(via voie A) + P(via voie B) + P(via voie C)"*
+*« P(événement) = P(via voie A) + P(via voie B) + P(via voie C) »* — valable si les voies sont **mutuellement exclusives** ; sinon, retrancher les intersections.
 
 ### Limite : décomposition excessive
 
-Au-delà de 4-5 sous-questions, la décomposition introduit plus d'erreur qu'elle n'en réduit. Chaque sous-estimation a sa propre marge d'erreur, et les marges se propagent.
+Au-delà de 4-5 sous-questions, la décomposition risque d'introduire plus d'erreur qu'elle n'en réduit (heuristique) : chaque sous-estimation a sa propre marge d'erreur, et les marges se propagent.
 
 **Règle** : décomposer jusqu'à ce que chaque sous-question soit *clairement plus facile à estimer* que le tout, mais pas davantage.
 
@@ -103,14 +107,14 @@ Au-delà de 4-5 sous-questions, la décomposition introduit plus d'erreur qu'ell
 |---------|---------|
 | **Géopolitique** | UCDP/PRIO Armed Conflict Dataset, Polity IV, Freedom House |
 | **Économique** | IMF World Economic Outlook, OECD historical data, BIS |
-| **Élections** | EUNDS election database, ParlGov, IFES |
+| **Élections** | ParlGov, IFES ElectionGuide, CLEA |
 | **Marchés** | CRSP, Compustat, Bloomberg historicals |
 | **M&A** | Refinitiv, Mergermarket, S&P Capital IQ |
 | **Tech adoption** | Gartner, Pew Research tech surveys |
 | **Maladies/épidémies** | OMS, ECDC, CDC historiques |
 | **Catastrophes** | EM-DAT, NOAA, Munich Re NatCat |
 
-Pour des questions plus exotiques : Google Scholar avec "base rate of X" + recherche sur Metaculus (plateforme publique de forecasting où les bases rates sont souvent estimées).
+Pour des questions plus inhabituelles : Google Scholar avec « base rate of X », et les questions résolues des plateformes publiques de prévision (Metaculus, Good Judgment Open), qui renseignent sur des classes de questions comparables — ce ne sont pas des taux de base au sens strict.
 
 ### Choisir la bonne classe de référence
 
@@ -126,23 +130,24 @@ Le piège : **trop spécifique** = pas assez de cas (échantillon trop petit) ; 
 
 **Exemple** : *"Cette startup va-t-elle atteindre 100M$ ARR dans 5 ans ?"*
 
-- Classe étroite : startups SaaS B2B, séries B levées en 2024, secteur X → ~12 cas → base rate ~17%
-- Classe large : toute startup ayant levé en série B en 2024 → ~800 cas → base rate ~4%
-- Estimation : entre 4% et 17%, probablement vers 8-12% selon facteurs spécifiques.
+*(Chiffres fictifs, pour illustrer la méthode.)*
+- Classe étroite : startups SaaS B2B ayant levé une série B à une date comparable, secteur X → ~12 cas → taux ~17 % (2 cas sur 12 : très instable)
+- Classe large : toutes les startups ayant levé une série B → ~800 cas → taux ~4 %
+- Estimation : entre 4 % et 17 %, plus proche de la classe large tant que la classe étroite compte si peu de cas.
 
-### Mise en garde : "this time is different"
+### Mise en garde : « this time is different »
 
-L'idée que le cas présent est qualitativement différent du tableau historique est **statistiquement fausse 80% du temps** (Reinhart & Rogoff, *This Time Is Different*, 2009). C'est le biais inside view dans toute sa force.
+Reinhart & Rogoff (*This Time Is Different: Eight Centuries of Financial Folly*, 2009) montrent, sur huit siècles de données, que les crises financières reviennent de façon récurrente et que la conviction « cette fois, c'est différent » précède souvent les crises. Leur thèse est **qualitative** : l'ouvrage ne fournit pas de pourcentage du type « faux X % du temps ». (La version 1.0 de ce fichier lui attribuait une statistique de 80 %, introuvable.)
 
-Quand un acteur dit "this time is different", c'est un signal pour **augmenter** le poids de la base rate, pas le diminuer.
+Quand un acteur dit « this time is different », c'est un signal pour **maintenir** le poids du taux de base et exiger des raisons spécifiques, pas pour l'abandonner.
 
 ---
 
 ## Étape 5 — Inside view (ajustements disciplinés)
 
-### Règle des 20 points
+### Seuil d'alerte des 20 points (convention interne)
 
-Tetlock observe que les ajustements inside view qui déplacent la probabilité de plus de 20 points par rapport à la base rate sont **systématiquement biaisés** vers le scénario narratif séduisant.
+Ce seuil est une **heuristique propre à ce protocole**. Il ne provient pas de Tetlock : les Dix commandements recommandent de trouver le bon équilibre entre vue intérieure et vue extérieure, sans seuil chiffré. Il s'appuie sur un constat général (la vue intérieure tend à être surpondérée ; Kahneman & Lovallo, 1993) et sert de point de contrôle, pas d'interdiction.
 
 **Discipline** : si votre ajustement total dépasse 20 points, **arrêter** et :
 1. Redécomposer la question (étape 3) pour identifier ce qui est sous-estimé.
@@ -150,6 +155,8 @@ Tetlock observe que les ajustements inside view qui déplacent la probabilité d
 3. Tester avec une seconde classe.
 
 ### Facteurs typiques d'ajustement
+
+*Magnitudes indicatives, convention interne non issue d'une étude :*
 
 | Facteur | Direction typique | Magnitude |
 |---------|-------------------|-----------|
@@ -159,7 +166,7 @@ Tetlock observe que les ajustements inside view qui déplacent la probabilité d
 | Conjoncture économique défavorable | ↓ (pour beaucoup) | ±5-10 pts |
 | Pression réglementaire/politique active | dépend | ±5-15 pts |
 
-Ne **jamais** ajuster pour : "j'ai un bon feeling", "tout le monde le dit", "c'est l'évidence". Ces ne sont pas des facteurs — ce sont des biais.
+Ne **jamais** ajuster pour : « j'ai un bon feeling », « tout le monde le dit », « c'est l'évidence ». Ce ne sont pas des facteurs — ce sont des biais.
 
 ---
 
@@ -189,15 +196,15 @@ Question : *"Comment X va-t-il se résoudre d'ici T ?"*
 
 ❌ S1 = légère détérioration, S2 = détérioration modérée, S3 = détérioration sévère.
 
-Ce n'est pas MECE — c'est une seule prédiction (détérioration) sur trois niveaux d'intensité. Si vous voulez probabiliser l'intensité, faites de l'intensité la question principale.
+Ce n'est pas exhaustif — il manque l'amélioration et la stabilité. Si vous voulez probabiliser l'intensité, faites de l'intensité la question principale et couvrez toute l'échelle (y compris « pas de détérioration »).
 
 ### Probabilités granulaires
 
-Les forecasters disciplinés du GJP utilisent des incréments de 5%. Pas de "30% ou 35%, je ne sais pas trop" — choisir 30% ou 35% explicitement.
+Choisir un nombre explicite : pas de « 30 % ou 35 %, je ne sais pas trop ».
 
-**Pourquoi** : la calibration empirique montre que les incréments de 5% capturent l'essentiel de la discrimination utile. En dessous (incréments de 1%) = fausse précision. Au-dessus (incréments de 25%) = perte d'information.
+**Ce que dit la recherche** : dans les données du GJP, arrondir les prévisions à des catégories plus grossières (par exemple les expressions verbales d'incertitude) dégrade systématiquement la précision ; les meilleurs prévisionnistes distinguent en moyenne une dizaine de niveaux de probabilité ou davantage (Friedman et al., 2018). Les prévisionnistes y utilisent spontanément beaucoup de multiples de 10 % et de 5 %, mais rien ne montre qu'un pas de 5 % soit un optimum.
 
-Exception : pour les événements à très basse probabilité (< 5%), utiliser des incréments de 1% (1%, 2%, 3%, 5%, 7%, 10%).
+**Règle pratique du skill** : des pas de 5 % conviennent dans la zone 10-90 % ; en dessous de 10 % et au-dessus de 90 %, utiliser des pas plus fins (1 %, 2 %, 3 %, 5 %, 7 % ; 93 %, 95 %, 97 %, 98 %, 99 %), car un facteur 2 entre 1 % et 2 % est une différence importante. Une précision plus fine est admise si l'analyse la justifie.
 
 ---
 
@@ -211,9 +218,11 @@ Un bon indicateur est :
 - **discriminant** (corrélé à un scénario, pas neutre)
 - **non-ambigu** (pas d'interprétation requise)
 
-**Test** : si l'indicateur apparaît, la probabilité du scénario auquel il est associé doit augmenter d'au moins 10 points. Sinon, ce n'est pas un bon indicateur.
+**Test (convention interne)** : si l'indicateur apparaît, la probabilité du scénario auquel il est associé devrait bouger d'au moins 10 points (en termes bayésiens, son BF doit être nettement différent de 1). Sinon, ce n'est pas un indicateur discriminant.
 
 ### Cadence de révision
+
+*Convention interne :*
 
 | Horizon prédiction | Cadence recommandée |
 |--------------------|---------------------|
@@ -228,4 +237,14 @@ Un bon indicateur est :
 
 ## Notes finales
 
-Le protocole est **coûteux**. Une fiche complète prend 30-60 minutes pour un analyste exercé, et davantage pour un débutant. C'est précisément ce coût qui distingue la discipline prédictive de l'opinion. Le rendement n'apparaît qu'à l'échelle : sur 50-100 prédictions disciplinées avec scoring, l'analyste apprend ses propres patterns de biais et s'améliore. C'est le rôle du `calibration-engine`.
+Le protocole est **coûteux** : une fiche complète demande un travail de recherche réel (classe de référence, sources), de l'ordre de plusieurs dizaines de minutes pour un analyste exercé. Le rendement n'apparaît qu'à l'échelle : il faut un nombre suffisant de prédictions scorées (au moins 30 pour une lecture de calibration, voir `calibration-engine`) pour que l'analyste apprenne ses propres patterns de biais.
+
+---
+
+## Références
+
+- Friedman, J. A., Baker, J. D., Mellers, B. A., Tetlock, P. E., & Zeckhauser, R. (2018). The value of precision in probability assessment. *International Studies Quarterly*, 62(2), 410-422.
+- Kahneman, D., & Lovallo, D. (1993). Timid choices and bold forecasts. *Management Science*, 39(1), 17-31.
+- Reinhart, C. M., & Rogoff, K. S. (2009). *This Time Is Different: Eight Centuries of Financial Folly*. Princeton University Press.
+- Tetlock, P. E. (2005). *Expert Political Judgment*. Princeton University Press.
+- Tetlock, P. E., & Gardner, D. (2015). *Superforecasting*. Crown.

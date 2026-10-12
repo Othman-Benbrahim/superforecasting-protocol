@@ -1,12 +1,12 @@
 # Scénarios concurrents & Probabilités granulaires
 
-Ce fichier détaille la construction de scénarios MECE (Mutually Exclusive, Collectively Exhaustive) et l'usage des probabilités granulaires — deux des pratiques les plus distinctives des superforecasters.
+Ce fichier détaille la construction de scénarios MECE (Mutually Exclusive, Collectively Exhaustive) et l'usage des probabilités granulaires.
 
 ---
 
 ## Pourquoi des scénarios concurrents
 
-L'analyste non-discipliné formule **un scénario** (le plus plausible à ses yeux) et l'argumente. C'est le piège du scénario unique, documenté par Schoemaker (*Sloan Management Review*, 1995) : on devient prisonnier de son récit, on cherche la confirmation, on ignore les signaux contraires.
+L'analyste non discipliné formule **un scénario** (le plus plausible à ses yeux) et l'argumente. C'est le piège du scénario unique, discuté par Schoemaker (« Scenario planning: A tool for strategic thinking », *Sloan Management Review*, 1995) : on devient prisonnier de son récit, on cherche la confirmation, on ignore les signaux contraires.
 
 Les scénarios concurrents forcent l'analyste à :
 - **reconnaître** que d'autres trajectoires sont possibles
@@ -14,7 +14,7 @@ Les scénarios concurrents forcent l'analyste à :
 - **valider** par sommation à 100% qu'il a couvert l'espace
 - **comparer** la fertilité respective des trajectoires
 
-C'est aussi la condition pour que la prédiction soit **scoreable** : un Brier score n'a de sens qu'avec des probabilités attribuées à plusieurs résultats possibles.
+C'est aussi la condition pour que la prédiction soit **scorable** : le Brier score compare des probabilités attribuées à un ensemble complet d'issues (deux pour une question binaire, davantage pour une question multinomiale).
 
 ---
 
@@ -30,7 +30,7 @@ C'est aussi la condition pour que la prédiction soit **scoreable** : un Brier s
 - *"Existe-t-il un résultat plausible qui ne rentre dans aucun de mes scénarios ?"*
 - Si oui → ajouter un scénario "autre" ou reformuler.
 
-**Test final** : probabilités somment-elles exactement à 1.00 ? Si non, il manque ou il y a double comptage.
+**Test final** : les probabilités somment-elles exactement à 1.00 ? Si non, il manque une issue ou il y a double comptage. (La somme à 1 est nécessaire, pas suffisante : des scénarios qui se chevauchent peuvent sommer à 1 par ajustement.)
 
 ---
 
@@ -42,7 +42,7 @@ Pour les questions oui/non simples :
 - S1 = OUI (P)
 - S2 = NON (1−P)
 
-Trivialement MECE. C'est le format minimal.
+Trivialement MECE. C'est le format minimal, et le format naturel des questions binaires. Ajouter des scénarios n'a de sens que si l'on veut distinguer les **voies** ou **modalités** de réalisation.
 
 #### Stratégie B — Tripartition standard
 
@@ -118,77 +118,71 @@ Que signifient "majeure" et "élevée" précisément ? Sans seuils opérationnel
 
 ❌ S1 = Scénario A, S2 = Scénario B, S3 = "Autre".
 
-Si "Autre" porte plus de 20% de probabilité, c'est qu'il y a au moins un scénario significatif non-explicité. **Le nommer**.
+Si « Autre » porte plus de 20 % de probabilité (seuil indicatif), c'est probablement qu'au moins un scénario significatif n'est pas explicité. **Le nommer**.
 
 ### Antipattern 4 — Scénarios non-exhaustifs
 
 ❌ Probabilités sommant à 80% sans scénario résiduel.
 
-Soit ajouter un scénario "aucun des précédents", soit normaliser à 100% en remontant chaque probabilité.
+Ajouter d'abord un scénario « aucun des précédents » : les 20 % manquants représentent souvent une issue réelle. Ne renormaliser proportionnellement que si l'on est certain que les scénarios listés sont exhaustifs — la renormalisation masque sinon l'issue oubliée.
 
 ### Antipattern 5 — Trop de scénarios
 
 ❌ 8 scénarios à 12.5% chacun.
 
-Au-delà de 5 scénarios, l'analyste a en fait perdu sa capacité à discriminer. **Regrouper** les scénarios similaires.
+Au-delà de 5 scénarios, il devient difficile de discriminer entre eux (heuristique). **Regrouper** les scénarios similaires, sauf si la question l'impose (ex. intervalles d'une variable continue).
 
 ---
 
-## Probabilités granulaires : la règle des 5%
+## Probabilités granulaires
 
-### Pourquoi 5%
+### Ce que dit la recherche
 
-Les superforecasters du GJP utilisent quasi-exclusivement des incréments de **5%** : 5, 10, 15, 20, 25, 30, ..., 95.
+La version 1.0 affirmait que les superforecasters utilisent « quasi exclusivement » des pas de 5 % et que toute précision plus fine serait de la « fausse précision ». C'est contredit par les données du Good Judgment Project : Friedman, Baker, Mellers, Tetlock & Zeckhauser (2018) montrent que **arrondir les prévisions à des catégories plus grossières dégrade systématiquement leur précision**, et que les meilleurs prévisionnistes distinguent en moyenne une dizaine de niveaux de probabilité (davantage pour certains). Dans ces données, environ la moitié des prévisions sont des multiples de 10 % et un quart d'autres multiples de 5 % : c'est une habitude, pas un optimum démontré.
 
-Pourquoi :
-- **En dessous (1-2%)** : fausse précision. Personne ne distingue réellement 23% de 26%.
-- **Au-dessus (10-25%)** : perte d'information. La différence entre 30% et 50% importe.
-- **À 5%** : équilibre optimal entre précision et calibration.
+### Règle pratique du skill (convention)
 
-### Exception pour les basses probabilités
-
-Pour P < 5%, utiliser des incréments plus fins :
-- 1%, 2%, 3%, 5%, 7%, 10%
-
-Pourquoi : à basse probabilité, un facteur 2 (1% vs 2%) reste significatif.
-
-De même pour P > 95% :
-- 95%, 97%, 98%, 99%
+- **Zone 10-90 %** : des pas de 5 % sont un bon défaut ; une valeur plus fine est admise si l'analyse la justifie.
+- **En dessous de 10 %** : pas plus fins — 1 %, 2 %, 3 %, 5 %, 7 %, 10 % — car un facteur 2 (1 % vs 2 %) est une différence importante.
+- **Au-dessus de 90 %** : 90 %, 93 %, 95 %, 97 %, 98 %, 99 %.
+- **Plage admise** : [1 % ; 99 %] ; hors de [5 % ; 95 %], justification explicite (règle commune avec `calibration-engine`).
 
 ### Discipline : pas de "vers 30%"
 
 L'analyste discipliné dit "30%" ou "35%", jamais "vers 30%". L'imprécision verbale masque le manque de réflexion. Le choix entre 30 et 35 doit être délibéré.
 
-### Test du parier
+### Test du pari
 
-**Test classique du Good Judgment Project** : *"Êtes-vous prêt à parier à ce ratio ?"*
+**Outil classique de la théorie de la décision** (interprétation subjective des probabilités chez de Finetti et Savage), souvent recommandé en prévision : *« Êtes-vous prêt à parier à cette cote ? »*
 
-Si vous estimez 60% pour l'événement X, êtes-vous prêt à parier 60$ contre 40$ que X se produira ? Si vous hésitez, soit votre probabilité est trop haute (vous croyez moins), soit trop basse (vous croyez plus). Ajuster.
+Si vous estimez 60 % pour l'événement X, seriez-vous indifférent entre miser 60 € pour gagner 40 € si X se produit, et miser 40 € pour gagner 60 € si X ne se produit pas ? Si vous préférez nettement l'un des deux côtés, votre probabilité n'est pas la bonne : ajuster dans le sens du pari que vous préférez.
 
 ---
 
 ## Estimer correctement les basses probabilités
 
-Les humains sous-estiment systématiquement la fréquence des événements rares mais réguliers (ex. crises financières) et sur-estiment la fréquence des événements catastrophiques médiatisés (ex. attentats terroristes), selon les travaux de Slovic, Fischhoff et Lichtenstein (*Risk Analysis*, 1980-1990).
+Dans l'étude classique de Lichtenstein, Slovic, Fischhoff, Layman & Combs (1978, « Judged frequency of lethal events », *Journal of Experimental Psychology: Human Learning and Memory*, 4(6), 551-578), les sujets **surestiment** la fréquence des causes de décès rares et spectaculaires (souvent médiatisées) et **sous-estiment** celle des causes fréquentes et banales. Pour la prévision : ne pas laisser la saillance médiatique fixer une probabilité, et toujours revenir au taux de base.
 
 ### Heuristiques pour les basses probabilités
 
 **Heuristique 1 — Inverser** : au lieu d'estimer P(X), estimer P(non X) si X est rare. Plus facile à intuitionner.
 
-**Heuristique 2 — Comparer à des réferences connues** :
-- P ≈ 1% : un événement par décennie (à l'échelle d'une vie active)
-- P ≈ 5% : un événement par décennie ou deux en l'espérance
-- P ≈ 10% : approximativement tous les 10 ans dans une décennie observable
-- P ≈ 25% : un trimestre par an
-- P ≈ 50% : un événement sur deux
+**Heuristique 2 — Traduire en fréquences** (pour une probabilité **annuelle** constante) :
+- P ≈ 1 % par an : environ une fois par siècle ; ≈ 10 % de chances sur une décennie
+- P ≈ 5 % par an : environ une fois tous les 20 ans ; ≈ 40 % sur une décennie
+- P ≈ 10 % par an : environ une fois par décennie ; ≈ 65 % sur une décennie
+- P ≈ 25 % : une chance sur quatre
+- P ≈ 50 % : une chance sur deux
 
-**Heuristique 3 — Vérifier la cohérence avec d'autres prédictions** : si on estime P(A) = 5% et P(B) = 5%, mais qu'on jugerait également surprenant si A *et* B se produisaient, il y a incohérence.
+(Sur n années, la probabilité d'au moins une occurrence vaut 1 − (1 − p)ⁿ, pas n × p. La version 1.0 contenait des équivalences erronées, ex. « 1 % = un événement par décennie ».)
+
+**Heuristique 3 — Vérifier la cohérence avec d'autres prédictions** : P(A et B) ne peut pas dépasser min(P(A), P(B)). Si l'on estime P(A) = 5 % et P(B) = 5 % mais que l'on donne 10 % au scénario « A et B », il y a incohérence (erreur de conjonction). Inversement, si A et B sont indépendants, P(A et B) = 0.25 % : vérifier que la surprise ressentie correspond.
 
 ---
 
 ## Mise en garde : conservation par défaut
 
-L'inertie est puissante. Pour la plupart des questions prospectives, le scénario **statu quo** ou **continuation des tendances** est le plus probable à court terme — souvent 50-70%.
+L'inertie est puissante. Pour beaucoup de questions prospectives à court terme, le scénario **statu quo** ou **continuation des tendances** est le plus probable (ordre de grandeur indicatif, à confirmer par le taux de base de la classe).
 
 Si vos scénarios donnent moins de poids au statu quo, **vérifier** que c'est justifié par des indicateurs forts, pas par la séduction des changements dramatiques.
 
@@ -219,17 +213,17 @@ C'est l'erreur la plus commune des analystes débutants : sur-pondérer le chang
 
 #### Test MECE
 - ME : un résultat ne peut pas être dans deux scénarios → ✓
-- CE : peut-on imaginer un résultat hors de ces quatre ? → annulation ? → ajouter S5 = 0% (probabilité résiduelle, événement non considéré)
+- CE : peut-on imaginer un résultat hors de ces quatre ? → oui : élection annulée ou reportée au-delà de la date butoir → ajouter **S5 = « pas de résultat officiel avant la date butoir » (1 %)** et réduire S4 à 14 %. Un scénario plausible ne reçoit jamais 0 % : ce serait une certitude qu'il n'arrivera pas.
 
-✓ Set valide.
+Ensemble final : S1 5 %, S2 45 %, S3 35 %, S4 14 %, S5 1 %. Somme = 100 % ✓
 
 ### Probabilités granulaires
 
-Toutes à incréments de 5% : 5, 45, 35, 15. Somme = 100. ✓
+Pas de 5 % dans la zone centrale ; pas plus fins pour les issues rares (14 %, 1 %), conformément à la règle pratique ci-dessus.
 
 ### Test du parier
 
-P(X gagne au second tour) = 45%. Suis-je prêt à parier 45$ contre 55$ que cela se produira ? Si oui, la probabilité est bien calibrée. Si je trouverais le pari déséquilibré dans un sens, ajuster.
+P(X gagne au second tour) = 45 %. Suis-je indifférent entre miser 45 € pour en gagner 55 € si cela se produit, et le pari inverse ? Si oui, la probabilité reflète ma croyance (ce qui n'en garantit pas la calibration, que seul le scoring établit). Si je préfère un côté, ajuster.
 
 ---
 
@@ -238,10 +232,19 @@ P(X gagne au second tour) = 45%. Suis-je prêt à parier 45$ contre 55$ que cela
 Pour chaque prédiction structurée :
 1. Identifier le type de question (binaire / multinomiale / continue / conditionnelle)
 2. Construire 3-5 scénarios MECE
-3. Attribuer probabilités par incréments de 5% (1% pour très basses, 1% pour très hautes)
+3. Attribuer des probabilités explicites (pas de 5 % dans la zone centrale, pas plus fins aux extrêmes ; plage [1 % ; 99 %])
 4. Vérifier somme = 100%
 5. Tester MECE explicitement
-6. Tester chaque probabilité par "test du parier"
+6. Tester chaque probabilité par le test du pari
 7. Documenter dans le format standard du SKILL
 
 Cette discipline est ce qui rend la prédiction scoreable, donc améliorable, donc utile.
+
+---
+
+## Références
+
+- Friedman, J. A., Baker, J. D., Mellers, B. A., Tetlock, P. E., & Zeckhauser, R. (2018). The value of precision in probability assessment. *International Studies Quarterly*, 62(2), 410-422.
+- Lichtenstein, S., Slovic, P., Fischhoff, B., Layman, M., & Combs, B. (1978). Judged frequency of lethal events. *Journal of Experimental Psychology: Human Learning and Memory*, 4(6), 551-578.
+- Schoemaker, P. J. H. (1995). Scenario planning: A tool for strategic thinking. *Sloan Management Review*, 36(2), 25-40.
+- Tversky, A., & Kahneman, D. (1983). Extensional versus intuitive reasoning: The conjunction fallacy in probability judgment. *Psychological Review*, 90(4), 293-315.

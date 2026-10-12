@@ -1,6 +1,6 @@
 # Base rates & Outside view — Méthode et sources
 
-L'**outside view** (Kahneman, Lovallo, *Management Science*, 1993) est la pierre angulaire du superforecasting. C'est aussi la plus difficile à appliquer parce qu'elle exige de **résister à la séduction du cas particulier**.
+L'**outside view** (Kahneman & Lovallo, *Management Science*, 1993) est l'un des piliers de la prévision disciplinée (commandement 3 de Tetlock : équilibrer vue intérieure et vue extérieure). C'est aussi la plus difficile à appliquer parce qu'elle exige de **résister à la séduction du cas particulier**.
 
 Ce fichier détaille la méthode et fournit des sources opérationnelles.
 
@@ -12,7 +12,7 @@ Devant un cas spécifique (une élection, un conflit, une fusion), la tentation 
 
 L'outside view inverse la démarche : *"Mettons de côté les spécificités. Cas comparables historiques : combien de fois ce type d'événement s'est-il produit ?"*
 
-L'évidence empirique (Kahneman, *Thinking, Fast and Slow*, chap. 23-24 ; Tetlock, *Expert Political Judgment*, 2005) montre que l'outside view bat l'inside view en précision dans 60-80% des cas, surtout sur les horizons longs.
+Les travaux sur la planification et la prévision documentent un biais systématique en faveur de la vue intérieure, qui conduit à des prévisions trop optimistes (Kahneman & Lovallo, 1993 ; Kahneman, *Thinking, Fast and Slow*, 2011, chap. 23), et la méthode de la classe de référence améliore la prévision des coûts et délais de projets (Flyvbjerg, 2006). Il n'existe pas, à notre connaissance, de chiffre général du type « l'outside view gagne dans X % des cas » ; la version 1.0 de ce fichier annonçait « 60-80 % », sans source.
 
 ---
 
@@ -60,10 +60,10 @@ Toujours faire l'exercice avec une **seconde** classe de référence (plus étro
 | **Correlates of War** | Guerres, alliances, capacités | Libre (correlatesofwar.org) |
 | **MID dataset (Militarized Interstate Disputes)** | Disputes inter-étatiques | Libre |
 
-**Exemples de base rates utiles** :
-- Probabilité qu'un État autoritaire devienne démocratique dans une décennie donnée : ~5-8% (V-Dem)
-- Probabilité qu'une crise diplomatique s'escalade en conflit armé : ~3-5% (MID)
-- Probabilité qu'une élection présidentielle dans un pays démocratique change le parti au pouvoir : ~35-45%
+**Ordres de grandeur à recalculer avant usage** — les valeurs de la version 1.0 n'étaient accompagnées ni de fenêtre temporelle, ni de définition opérationnelle, ni de calcul reproductible. Elles sont retirées. Pour chaque cas, voici comment établir le taux de base :
+- *Transition d'un régime autoritaire vers la démocratie sur 10 ans* : V-Dem (indice de démocratie électorale) ou Polity V, avec un seuil de classification et une fenêtre explicites.
+- *Escalade d'une crise interétatique en conflit armé* : jeu MID (Correlates of War) pour les niveaux d'hostilité, UCDP pour les conflits armés ; définir « crise » et « conflit » avant de compter.
+- *Alternance au pouvoir lors d'une élection présidentielle* : ParlGov ou CLEA, en précisant le périmètre (démocraties retenues, période).
 
 ### Économique et financier
 
@@ -76,9 +76,9 @@ Toujours faire l'exercice avec une **seconde** classe de référence (plus étro
 | **NBER recession dataset** | Récessions US datées | Libre |
 | **Reinhart-Rogoff database** | Crises financières historiques | Libre |
 
-**Exemples** :
-- Probabilité qu'une récession US se produise dans une fenêtre de 24 mois après inversion de la courbe des taux : ~70-80% (sur données 1955-2024)
-- Probabilité d'une crise bancaire dans une décennie donnée (post-1970) : ~20-25% (Reinhart-Rogoff)
+**Exemples (à recalculer sur la source avant usage)** :
+- *Récession américaine après inversion de la courbe des taux* : historiquement, la plupart des récessions américaines depuis les années 1960 ont été précédées d'une inversion de l'écart 10 ans – 3 mois, et la Fed de New York publie un modèle de probabilité fondé sur cet écart. Mais l'échantillon est petit (moins d'une dizaine d'épisodes) et **l'inversion de 2022-2024 n'a pas été suivie d'une récession datée** : à la date de cette révision, le NBER n'a daté aucun pic conjoncturel postérieur à février 2020. Le taux de 70-80 % annoncé dans la version 1.0 n'était pas sourcé et surestime la fiabilité du signal ; utiliser le modèle de la Fed de New York et la chronologie du NBER, avec un intervalle large.
+- *Crise bancaire systémique sur une décennie* : base de données de Reinhart & Rogoff ou de Laeven & Valencia (FMI) ; préciser l'échantillon de pays et la période.
 
 ### M&A et corporate
 
@@ -89,9 +89,9 @@ Toujours faire l'exercice avec une **seconde** classe de référence (plus étro
 | **SEC EDGAR** | Filings US publics | Libre (sec.gov) |
 | **Compustat (via WRDS)** | Données financières corporates | Académique |
 
-**Exemples** :
-- Probabilité qu'une entreprise listée soit acquise sur 5 ans : ~7-10% (varie par secteur)
-- Probabilité qu'une fusion annoncée échoue : ~10-15% (par régulation, prix, vote actionnaires)
+**Exemples (ordres de grandeur non sourcés dans la version 1.0, à établir sur les bases ci-dessus)** :
+- *Entreprise cotée acquise sur un horizon donné* : très variable selon le secteur, la taille et la période ; calculer sur la base (ex. SEC EDGAR ou Compustat via WRDS) pour la classe pertinente.
+- *Opération annoncée non finalisée* : à mesurer sur les opérations annoncées d'une période et d'une zone données (Refinitiv, Mergermarket), en distinguant les causes (régulation, prix, vote).
 
 ### Élections et politique
 
@@ -110,14 +110,14 @@ Toujours faire l'exercice avec une **seconde** classe de référence (plus étro
 | **Pew Research Internet/Tech** | Adoption tech par publics | Libre |
 | **Our World in Data — Technology** | Séries historiques d'adoption | Libre |
 
-**Exemple** : Time to 100M users pour une nouvelle technologie consumer : ~7-9 ans en médiane historique (variance énorme).
+**Exemple** : le délai d'adoption d'une technologie grand public varie de quelques mois à plusieurs décennies selon l'époque et le type de produit (séries d'Our World in Data) ; aucune médiane unique n'a de sens sans définir la classe. (La version 1.0 citait « ~7-9 ans », sans source.)
 
 ### Plateformes communautaires de forecasting
 
 Sources spécifiques au forecasting où les questions sont déjà décomposées et probabilisées :
 
 - **Metaculus** (metaculus.com) — questions calibrées, base rates souvent explicites
-- **Good Judgment Open** (goodjudgment.com) — questions GJP-style
+- **Good Judgment Open** (gjopen.com) — questions dans le style du GJP
 - **PolyMarket** / **Manifold Markets** — prediction markets (avec biais de marché)
 - **Kalshi** — prediction markets régulés
 
@@ -153,43 +153,37 @@ Les base rates calculées sur des données pré-2008 (par exemple) peuvent ne pl
 
 ### Piège 5 : Refus de l'outside view
 
-L'analyste expert "sait" que son cas est différent. C'est presque toujours faux. Tetlock documente que les *spécialistes* sont les plus mauvais à appliquer l'outside view — leur expertise les attache à l'inside view.
+L'analyste expert « sait » que son cas est différent. C'est souvent faux. Dans *Expert Political Judgment*, Tetlock observe que la spécialisation n'améliore guère la précision au-delà d'un niveau de culture générale, et que les experts au style de pensée « hérisson » (une grande idée appliquée partout) sont les moins précis.
 
 **Contre-mesure** : commencer **toujours** par l'outside view, même quand on a une intuition forte. Si l'inside view diverge fortement, suspecter un biais.
 
 ---
 
-## Cas-type : application complète
+## Cas-type : la mécanique d'une estimation (chiffres fictifs)
 
-**Question** : *"Probabilité qu'une crise constitutionnelle majeure (impeachment, dissolution, démission forcée du chef d'État) se produise aux États-Unis d'ici fin 2027 ?"*
+*Ce cas illustre la méthode ; les effectifs sont fictifs et doivent être remplacés par un comptage réel sur une source documentée. La version 1.0 présentait des effectifs contradictoires, une conversion décennie → 24 mois erronée et une cote de marché datée invérifiable.*
 
-### Classe étroite
-- Démocraties OCDE depuis 1970
-- Cas de crise constitutionnelle majeure par décennie
+**Question** : *« Probabilité qu'un événement institutionnel majeur défini à l'avance (ex. : départ anticipé du chef de l'État, quelle qu'en soit la cause) survienne dans le pays P d'ici 24 mois ? »*
 
-→ ~3-5 cas pour 8-12 démocraties × 5 décennies = ~50 décennies-démocratie observées, ~5-8 crises → base rate par décennie ~10-15%, soit ~3-5% pour une fenêtre de 24 mois.
+### 1. Définir la classe et l'événement avant de compter
+- Classe étroite : démocraties de l'OCDE, 1970-2025, unité d'observation = pays-année.
+- Événement : défini par un critère vérifiable (ex. fin de mandat avant le terme constitutionnel).
 
-### Classe large
-- Toutes démocraties post-1945
-- Cas de crise comparable
+### 2. Compter (valeurs fictives)
+- 10 pays × 55 ans = 550 pays-années ; 11 événements → taux annuel ≈ 11/550 = **2 %**.
 
-→ base rate similaire (~3-5% sur 24 mois).
+### 3. Convertir à l'horizon de la question
+- Sur 24 mois : 1 − (1 − 0.02)² ≈ **4 %** (et non 2 × 2 % par simple addition — l'écart est faible ici, mais grandit avec le taux et l'horizon).
+- Si l'on part d'un taux par décennie (ex. 10 %) : taux annuel = 1 − 0.90^(1/10) ≈ 1.05 %, donc sur 24 mois ≈ 2.1 %, et non « 10 % ÷ 5 ».
 
-### Estimation outside view : ~3-5%
+### 4. Classe alternative
+- Toutes démocraties depuis 1945 : recompter. Si le taux diffère fortement, retenir une valeur intermédiaire et le noter.
 
-### Inside view (ajustements)
+### 5. Ajustements (inside view)
+- Lister les facteurs spécifiques au pays P et à la période, chacun avec son sens et sa magnitude, et vérifier le seuil d'alerte interne de 20 points.
 
-- Polarisation actuelle forte : +2 pts
-- Précédents récents (2019-2021) : +3 pts (les chocs récents augmentent la probabilité de réactivation des mécanismes utilisés)
-- Stabilité institutionnelle US historique : -2 pts
-
-**Total ajustement** : +3 pts → Estimation finale : ~6-8%
-
-### Comparaison avec marchés
-
-PolyMarket "Trump impeached/removed by 2027" : ~7% en mai 2026 (à vérifier en temps réel).
-
-Convergence : marqueur d'estimation raisonnable.
+### 6. Comparaison avec des agrégats externes
+- Une cote de marché prédictif ou une prévision agrégée (Metaculus, Good Judgment Open) peut servir de **point de comparaison**, consultée à la date de l'estimation et citée avec cette date. Une convergence n'est pas une validation : les marchés ont leurs propres biais (liquidité, biais de favori-outsider).
 
 ---
 
@@ -207,4 +201,16 @@ Ne **jamais** prétendre à une base rate quand il n'y en a pas. C'est de la fau
 
 ## Note finale
 
-Maîtriser l'outside view prend des années. Les superforecasters du GJP rapportent que c'est leur compétence la plus longue à acquérir et la plus payante. Investissez le temps. C'est ici que se joue le rendement réel de la discipline prédictive.
+Maîtriser l'outside view demande de la pratique : définir une classe avant de chercher, trouver la donnée, la convertir correctement à l'horizon, puis résister à la tentation de l'abandonner. C'est une compétence qui se travaille et se vérifie au scoring (`calibration-engine`).
+
+---
+
+## Références
+
+- Flyvbjerg, B. (2006). From Nobel Prize to project management: Getting risks right. *Project Management Journal*, 37(3), 5-15.
+- Kahneman, D., & Lovallo, D. (1993). Timid choices and bold forecasts. *Management Science*, 39(1), 17-31.
+- Kahneman, D. (2011). *Thinking, Fast and Slow*, chap. 23. Farrar, Straus and Giroux.
+- Reinhart, C. M., & Rogoff, K. S. (2009). *This Time Is Different*. Princeton University Press.
+- Tetlock, P. E. (2005). *Expert Political Judgment*. Princeton University Press.
+- Federal Reserve Bank of New York — The Yield Curve as a Leading Indicator : https://www.newyorkfed.org/research/capital_markets/ycfaq
+- NBER — Business Cycle Dating : https://www.nber.org/research/business-cycle-dating
