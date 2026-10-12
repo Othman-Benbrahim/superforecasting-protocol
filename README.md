@@ -2,7 +2,7 @@
 
 > *"Une prédiction qui ne précise ni horizon, ni probabilité, ni condition de réfutation n'est pas une prédiction. C'est une opinion."*
 
-Un skill Claude qui applique la **discipline du Good Judgment Project** (Tetlock & Mellers) à toute question prospective : décomposition Fermi, base rates, scénarios probabilisés, indicateurs observables, conditions de falsification. Transforme une intuition en prédiction structurée, scorable, améliorable.
+Un skill Claude qui applique à toute question prospective une **discipline de prévision inspirée des travaux du Good Judgment Project** (Tetlock, Mellers et collègues) : décomposition Fermi, base rates, scénarios probabilisés, indicateurs observables, conditions de falsification. Transforme une intuition en prédiction structurée, scorable, améliorable.
 
 ---
 
@@ -23,11 +23,11 @@ C'est la discipline minimum sans laquelle aucun système prédictif ne peut s'am
 
 ## Pourquoi ce skill
 
-L'analyse géopolitique, économique et organisationnelle souffre d'une faille structurelle documentée par Tetlock dans *Expert Political Judgment* (2005) : les experts produisent en moyenne des prédictions **à peine meilleures que le hasard**, et systématiquement moins bonnes qu'un protocole disciplinaire appliqué par des amateurs entraînés.
+L'analyse géopolitique, économique et organisationnelle souffre d'une faiblesse documentée par Tetlock dans *Expert Political Judgment* (2005) : en moyenne, les prédictions des experts font **à peine mieux que le hasard** ou que des règles d'extrapolation simples, surtout à horizon de plusieurs années.
 
-Le facteur clé n'est pas le savoir sectoriel. C'est la **discipline méthodologique**. Le Good Judgment Project (2011-2015), financé par l'IARPA, a démontré qu'un protocole en 7 étapes permettait à des prévisionnistes amateurs de battre les analystes professionnels du renseignement américain de 30% en moyenne (Mellers, Stone, Atanasov et al., *Psychological Science*, 2015).
+Le Good Judgment Project (2011-2015), financé par l'IARPA, a montré que la précision dépend en bonne partie de facteurs travaillables : entraînement au raisonnement probabiliste, travail en équipe, mises à jour fréquentes, agrégation des prévisions (Mellers et al., 2014 ; Mellers, Stone, Atanasov et al., 2015, *Journal of Experimental Psychology: Applied*, 21(1), 1-14). L'équipe Good Judgment a battu le groupe contrôle du tournoi de plus de 50 % ; Good Judgment affirme aussi une précision supérieure de plus de 30 % à celle d'analystes du renseignement ayant accès à des informations classifiées (chiffre institutionnel, sans méthode publiée sur la page source : https://goodjudgment.com/resources/the-superforecasters-track-record/).
 
-Ce skill encode ce protocole et le rend applicable à toute question prospective de l'écosystème IRIS∞.
+**Statut** : le GJP n'a pas publié de « protocole en 7 étapes ». Il résume ses résultats en quatre leviers (talent, entraînement, équipe, agrégation) et Tetlock & Gardner (2015) en « Dix commandements ». Les 7 étapes de ce skill sont une **synthèse originale** de ces pratiques, avec des conventions internes signalées comme telles. La version 1.0 de ce README la présentait à tort comme « le protocole du GJP » et citait l'article de 2015 dans *Psychological Science* (où est paru l'article de 2014, distinct).
 
 ---
 
@@ -76,9 +76,9 @@ Dans ces cas, le skill **demande une reformulation** plutôt que de produire une
 ```
 superforecasting-protocol/
 │
-├── README.md                              ← Ce fichier
-├── SKILL.md                               ← Agent principal (protocole 7 étapes)
-├── LICENSE                                ← GPL-3.0
+├── README.md                              ← Ce fichier (page du dépôt, non chargé par l'agent)
+├── SKILL.md                               ← Agent principal (7 étapes)
+├── LICENSE                                ← GPL-3.0 (ajouté en v1.1 ; absent en v1.0)
 │
 └── references/
     ├── protocole-7-etapes.md              ← Détail opératoire de chaque étape
@@ -94,10 +94,12 @@ superforecasting-protocol/
 
 | Référence | Apport |
 |-----------|--------|
-| **Tetlock & Gardner (2015)** — *Superforecasting* | Protocole opérationnel principal |
-| **Tetlock (2005)** — *Expert Political Judgment* | Diagnostic : pourquoi les experts échouent |
-| **Mellers et al. (2015)** — Good Judgment Project results | Validation empirique du protocole |
-| **Kahneman (2011)** — *Thinking, Fast and Slow* | Outside view, base rate, biais |
+| **Tetlock & Gardner (2015)** — *Superforecasting* | Pratiques des meilleurs prévisionnistes, Dix commandements |
+| **Tetlock (2005)** — *Expert Political Judgment* | Diagnostic : limites de la prévision experte |
+| **Mellers et al. (2014)**, *Psychological Science* 25(5) | Effets de l'entraînement, des équipes, du suivi |
+| **Mellers et al. (2015)**, *JEP: Applied* 21(1) | Déterminants de la précision (dispositions, situation, comportement) |
+| **Friedman et al. (2018)**, *International Studies Quarterly* 62(2) | Valeur de la granularité des probabilités |
+| **Kahneman & Lovallo (1993)** ; **Kahneman (2011)**, chap. 23 | Outside view, classe de référence |
 | **Heuer (1999)** — *Psychology of Intelligence Analysis* | ACH, contrôle des biais |
 | **Klein (2007)** — Pre-Mortem technique | Discipline anti-surajustement |
 | **Hubbard (2010)** — *How to Measure Anything* | Calibration de l'incertitude |
@@ -108,19 +110,13 @@ Détail dans chaque fichier de référence.
 
 ## Activation
 
-Le skill se déclenche automatiquement sur :
-
-> "prédiction structurée", "forecast", "superforecasting", "probabilité de", "quelle est la probabilité", "horizon prospectif", "discipline de prédiction", "GJP protocol"
-
-Ou sur toute question prospective qui demande une probabilité explicite.
+Le déclenchement repose sur le champ `description` du `SKILL.md`, seul champ chargé à l'avance par les agents conformes à la spécification Agent Skills. Formulations typiques : « quelle est la probabilité que… », « prédiction structurée », « forecast », « superforecasting », ou toute question prospective qui demande une probabilité explicite.
 
 ---
 
 ## Modes d'utilisation
 
-**Mode rapide** (10-15 min) : protocole compact, scénarios essentiels.
-**Mode standard** (30-45 min) : protocole complet en 7 étapes.
-**Mode approfondi** : protocole + interaction avec `bayesian-updater` pour mise à jour itérative + journalisation pour `calibration-engine`.
+Les trois modes (rapide, standard, approfondi) sont définis par des critères d'activation et un contenu précis dans le `SKILL.md`, section « Modes d'exécution ». Le taux de base reste obligatoire dans tous les modes.
 
 ---
 
@@ -130,10 +126,11 @@ Ce skill est conçu pour fonctionner **seul ou orchestré** :
 
 | Skill frère | Relation |
 |-------------|----------|
-| `signaux-du-futur` | Source amont — fournit le matériau OSINT brut |
 | `bayesian-updater` | Skill aval — actualise les prédictions quand l'info arrive |
 | `calibration-engine` | Skill aval — score les prédictions a posteriori |
-| `miroir-trans-echelle` | Skill cousin — complète par lecture symbolique croisée |
+| `prediction-engine` | Orchestrateur — route vers ce skill (Mode A) |
+| `signaux-du-futur` *(externe, non livré ici)* | Source amont — matériau OSINT brut |
+| `miroir-trans-echelle` *(externe, non livré ici)* | Lecture symbolique croisée (plafond narrative attractor côté calibration) |
 
 ---
 
@@ -141,7 +138,7 @@ Ce skill est conçu pour fonctionner **seul ou orchestré** :
 
 - **La discipline ne crée pas la prescience.** Même rigoureux, le skill ne prédit pas mieux que ce que l'information disponible permet.
 - **Les probabilités sont des estimations subjectives.** Elles ne sont pas des fréquences objectives — elles deviennent valides *à mesure que la calibration s'établit*.
-- **Le protocole est coûteux.** Une bonne prédiction structurée prend 30-60 minutes minimum. Ce n'est pas un outil de réaction rapide.
+- **Le protocole est coûteux.** Une fiche complète demande une vraie recherche de taux de base. Ce n'est pas un outil de réaction instantanée (voir le mode rapide pour les cas simples).
 - **Le skill ne convient pas aux décisions à effet de seuil critique** (vie/mort, action immédiate) — il convient à la décision sous incertitude raisonnée.
 
 ---
